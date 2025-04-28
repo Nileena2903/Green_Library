@@ -1,0 +1,172 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'addbook.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Free Library System">
+    <meta name="keywords" content="Library System, Book System">
+    <meta name="author" content="Codeblogger">
+    <title>Library System</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Helvetica;
+            background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/hero-img.jpg') top center no-repeat;
+            background-size: cover;
+          }
+          
+    </style>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+
+    <!-- Pages -->
+    <link rel="stylesheet" href="/CSS/main.css">
+    <link rel="stylesheet" href="/CSS/book_list.css">
+    <link rel="stylesheet" href="/CSS/insertion_section.css">
+    <script>
+        $(document).ready(function(){
+    
+            // insertion_section
+               $("input").focus(function() {
+                   $(this).css("opacity",1)
+               })
+               $("input").blur(function() {
+                   $(this).css("opacity",.2)
+               })
+           
+               // close tr event
+               $(".close").click(function(){
+                   $(this).parents(".tab").hide(500)
+               })
+           
+               // add book info
+               $("#add").click(function(){
+                   let book_name = $("#bookName").val(),
+                       book_author = $("#authorName").val(),
+                       book_publisher = $("#publisherName").val(),
+                       book_number = $("#numberPage").val(),
+                       book_serial = $("#serialNumber").val(),
+                       new_tr = document.createElement("tr"),
+                       new_th_book_name = document.createElement("th"),
+                       new_th_book_author = document.createElement("td"),
+                       new_th_book_publisher = document.createElement("td"),
+                       new_th_book_page = document.createElement("td"),
+                       new_th_book_serial = document.createElement("td"),
+                       table_book_name = document.createTextNode(book_name),
+                       table_book_author = document.createTextNode(book_author),
+                       table_book_publisher = document.createTextNode(book_publisher),
+                       table_book_number = document.createTextNode(book_number),
+                       table_book_serial = document.createTextNode(book_serial);
+           
+                   // add txt
+                   new_th_book_name.appendChild(table_book_name);
+                   new_th_book_author.appendChild(table_book_author);
+                   new_th_book_publisher.appendChild(table_book_publisher);
+                   new_th_book_page.appendChild(table_book_number);
+                   new_th_book_serial.appendChild(table_book_serial);
+                   
+           
+                   // add new_tr --> td
+                   let name_tab = new_tr.appendChild(new_th_book_name);
+                   let author_tab = new_tr.appendChild(new_th_book_author);
+                   let publisher_tab = new_tr.appendChild(new_th_book_publisher);
+                   let page_tab = new_tr.appendChild(new_th_book_page);
+                   let serial_tab = new_tr.appendChild(new_th_book_serial);
+                   new_th_book_name.setAttribute("scope","row")
+           
+                   // add new_tr --> table
+                   let new_table = document.getElementById("tabs");
+                   new_table.appendChild(new_tr);
+                   new_tr.setAttribute("class","tab");
+                   
+           
+                   // close button
+                   let but_td = document.createElement("td"),
+                       but = document.createElement("button"),
+                       but_span = document.createElement("span"),
+                       span_txt = document.createTextNode("X");
+           
+                   but_td.appendChild(but);
+                   but.appendChild(but_span);
+                   but_span.appendChild(span_txt);
+                   new_tr.appendChild(but_td);
+           
+                   but.setAttribute("type","button");
+                   but.setAttribute("class","close");
+                   but.setAttribute("aria-label","Close");
+                   but_span.setAttribute("aria-hidden","true");
+           
+                   // click --> form reset
+                   this.form.reset();
+           
+                   // close form item
+                   $(".close").click(function(){
+                       $(this).parents(".tab").hide(500)
+           
+                   })
+           
+                   
+               })
+               
+           })
+           
+           
+    </script>
+</head>
+<body>
+    <!-- <h3>{{success}}</h3> to display messages--> 
+    <section id="one-page">
+        <div class="container">
+            <!-- Title -->
+            <div class="row">
+                <h1 class="text-light">Green Library </h1>
+            </div>
+
+            <div class="row mt-4">
+                <!-- insertion section -->
+                <div class="col-lg-5" id="insertion_section">
+                    <form class="form-group justify-content-center" method="POST">
+                        {% csrf_token %}
+                        <div class="row" id="name-section">
+                            <label for="bookName" class="text-light">Name</label>
+                            <input type="text" class="form-control" name="bn" id="bookName">
+                        </div>
+                        <div class="row" id="author-section">
+                            <label for="authorName" class="text-light">Author</label>
+                            <input type="text" class="form-control" name="au" id="authorName">
+                        </div>
+                        <div class="row" id="two-section">
+                            <div class="col-6">
+                                <label for="numberPage" class="text-light">Price</label>
+                                <input type="text" class="form-control"name="pr" id="numberPage">
+                            </div>
+                            <div class="col-6">
+                                <label for="serialNumber" class="text-light">Description</label>
+                                <input type="textarea" class="form-control"name="desc" id="serialNumber">
+                            </div>
+                        </div>
+                        <div class="add-button mt-4">
+                            <button type="submit" class="btn btn-danger btn-block" id="add" >ADD</button>
+                        </div>
+                      </form>
+                    </div>
+                    </section>
+    
+</body>
+
+
+</html>
